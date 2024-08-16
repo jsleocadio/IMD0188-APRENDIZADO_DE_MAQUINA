@@ -1,4 +1,0 @@
-#!/bin/bash
-# Instalando dependências do projeto
-sudo apt update
-sudo apt install -y pkg-config libmariadb-dev python3-venv python3-pip

@@ -1,7 +1,7 @@
 pandas
 sqlalchemy
-mariadb
 ipykernel
 python-dotenv
 nltk
 spacy
+pymysql

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Load the environment variables
 source .env
 
@@ -9,6 +11,9 @@ tar -xzf ./dump/glpi-database_20240813_020030.tar.gz -C ./dump
 echo "Backup descompactado com sucesso!"
 
 # Restore the database
+echo "Inicializando o container do banco de dados..."
+docker compose up -d db
+sleep 10
 echo "Criando o banco de dados..."
 docker compose exec db mariadb -u root --password=$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS glpi;"
 echo "Banco de dados criado com sucesso!"
