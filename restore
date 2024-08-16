@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Load the environment variables
+source .env
+
+# Untar the backup
+echo "Descompactando o backup..."
+tar -xzf ./dump/glpi-database_20240813_020030.tar.gz -C ./dump
+echo "Backup descompactado com sucesso!"
+
+# Restore the database
+echo "Criando o banco de dados..."
+docker compose exec db mariadb -u root --password=$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS glpi;"
+echo "Banco de dados criado com sucesso!"
+echo "Executando o dump..."
+docker compose exec db bash -c "cd /data/dump && mariadb -u root --password=$MARIADB_ROOT_PASSWORD glpi < database.sql"
+echo "Dump executado com sucesso!"
+echo "Garantindo as permissões..."
+docker compose exec db mariadb -u root --password=$MARIADB_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON glpi.* TO '$MARIADB_USER'@'%'; FLUSH PRIVILEGES;"
+echo "Permissões garantidas com sucesso!"
+
+# Remove the dump
+rm ./dump/database.sql

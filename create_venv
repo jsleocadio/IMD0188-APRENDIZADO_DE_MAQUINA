@@ -1,0 +1,5 @@
+#!/bin/bash
+# Criando ambiente virtual e instalando dependências python
+python3 -m venv glpi_venv
+source glpi_venv/bin/activate
+pip install -r requirements.txt

@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mariadb:10.11.6
+    container_name: mariadb
+    restart: always
+    environment:
+      MARIADB_USER: ${MARIADB_USER:-user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-password}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-example}
+    volumes:
+      - "./mariadb/data:/var/lib/mysql/data/"
+      - "./mariadb/logs:/var/lib/mysql/logs/"
+      - "./dump:/data/dump/"
+    ports:
+      - "3306:3306"

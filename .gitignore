@@ -1,0 +1,5 @@
+.env
+mariadb
+glpi_venv
+dump/*
+!dump/.gitkeep
