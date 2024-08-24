@@ -3,3 +3,5 @@ mariadb
 glpi_venv
 dump/*
 !dump/.gitkeep
+*.csv
+*.pkl
