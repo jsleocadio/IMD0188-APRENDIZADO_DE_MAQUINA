@@ -6,3 +6,4 @@ nltk
 spacy
 pymysql
 scikit-learn
+matplotlib
