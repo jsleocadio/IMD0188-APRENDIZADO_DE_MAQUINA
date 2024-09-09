@@ -7,3 +7,4 @@ spacy
 pymysql
 scikit-learn
 matplotlib
+scikit-posthocs
