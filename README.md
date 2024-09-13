@@ -2,55 +2,46 @@
 
 ## Identification & Affiliation
 
-Jefferson dos Santos Leocadio and Yuri Iohanssen Ribeiro Damasceno are currently pursuing a postgraduate degree in Information Technology at the Federal University of Rio Grande do Norte (UFRN). As part of their academic journey, they enrolled in the course "Machine Learning"[IMD0188] taught by Professor Daniel Sabino.
+Jefferson dos Santos Leocadio and Yuri Iohanssen Ribeiro Damasceno are postgraduate students in Information Technology at the Federal University of Rio Grande do Norte (UFRN). As part of their studies, they are enrolled in the course "Machine Learning" (IMD0188), instructed by Professor Daniel Sabino.
 
 ## Introduction
 
-Introduction to Machine Learning. Data Classification: classification problems; classification algorithms; classification validation; classifier committees. Notions of cluster analysis and multi-label learning. Applications.
-
-# Final Project
-
-## Introduction
-
-The Regional Electoral Court of Rio Grande do Norte (TRE-RN) uses the GLPI ("Gestionnaire Libre de Parc Informatique") system to manage its IT assets, problem tracking and service center. Currently, there is a department that analyzes all support tickets and classifies them, if this has not been done by the user, so that they can reach the responsible location. Failure to classify the tickets properly leads to longer wait times, resulting in a customer who is unable to actively perform their activity.
-
-This project consists of using classification models to optimize the efficiency of the triage sector and ensure faster service to the end customer. A pipeline was developed to classify the tickets descriptions by the customer. The dataset consists of approximately 65 thousand tickets.
+The Regional Electoral Court of Rio Grande do Norte (TRE-RN) employs the GLPI ("Gestionnaire Libre de Parc Informatique") system for IT asset management, problem tracking, and service desk operations. A department is responsible for reviewing and classifying support tickets if users have not done so, ensuring they are directed to the appropriate team. Improper classification can lead to increased response times, hampering users' ability to perform their tasks efficiently. This project aims to optimize the classification process using machine learning models to enhance the efficiency of ticket triage and improve service delivery.
 
 ## Pipeline
 
-The pipeline used  in this project consists of four steps shown in the flowchart below. The green boxes represent a step taken and the blue boxes represent the output artifact of that step.
+The project's pipeline comprises four main steps, as depicted in the flowchart below. Green boxes indicate the processes executed, while blue boxes represent the resulting artifacts at each stage. These steps are essential to prepare, process, and analyze the data to build and evaluate the classification models.
 
 ![pipeline.png](./pipeline.png)
 
 ## Fetch Data
 
-The first step involves acquiring data from the source. In this case, we use a database dump that contains GLPI data and recreate the database using a MariaDB container. From the recreated database we extract a dataset containing the tickets titles, descriptions and categories and save it to a CSV file.
+The initial step focuses on acquiring data from a GLPI database dump. We recreated the database environment using a MariaDB container to ensure consistency and accuracy in data extraction. From this setup, we extracted a dataset containing ticket titles, descriptions, and categories, which was then saved as a CSV file for further processing.
 
 ## Preprocessing
 
-This step takes the CSV file as input and cleans the data. The description and title columns are concatenated,punctuation and stopwords are removed, and word tokenization is performed. To conclude we use TF-IDV method to vectorize our tokens and create five versions of dataframes change the min_df parameter that been 0.025, 0.05, 0.01, 0.1, 0.075.
+In this preprocessing step, the CSV file is cleaned to prepare the data for modeling. The ticket title and description columns are concatenated, punctuation and stopwords are removed, and tokenization is performed to break text into meaningful words. We applied the TF-IDF (Term Frequency-Inverse Document Frequency) method for vectorization, creating five versions of the dataset by varying the `min_df` parameter (0.025, 0.05, 0.01, 0.1, and 0.075) to assess its impact on model performance.
 
 ## Data Segregation
 
-This step occurs at the end of `preprocessing.ipynb`. We split the datasets created at the step above about 50% to train the model and 50% to validate the model. After that we save all datasets in CSV files named of each parameter.
+At the conclusion of the preprocessing phase (`preprocessing.ipynb`), the datasets are split into training and validation sets, each containing 50% of the data. The split ensures that the model can be trained effectively and evaluated on unseen data. The resulting datasets are saved as CSV files, named according to their respective `min_df` parameter settings.
 
 ## Train
 
-This step receives the datasets divided in the previous step and carries out the training of k-NN and Random Forest model. There is the steps that we follow:
+In this step, the training datasets generated from the previous phase are used to train two machine learning models: k-Nearest Neighbors (k-NN) and Random Forest. These models were selected due to their effectiveness in handling classification problems. The following steps outline the training process and model evaluation:
 
 ### Evaluate accuracy with k-NN
 
-We use k-NN model to get the dataset with the best accuracy. After that, with the five train datasets that we have, the best result is the 0.01 dataset.
+The k-NN model was evaluated using accuracy as the primary metric to identify the dataset configuration that yields the best results. Among the five training datasets, the dataset with a `min_df` of 0.01 achieved the highest accuracy.
 
-### Training Models with the best dataset
+### Training Models with the Best Dataset
 
-We use the best dataset without changes and get the following results:
+Using the dataset identified as having the best performance (`min_df` = 0.01), we trained both the k-NN and Random Forest models without any further modifications. The results obtained are as follows:
 
 **K-Nearest Neighbors (KNN)**
 
-Acurácia: 0.5782
-
-Recall (weighted): 0.5782
+Accuracy: 0.5782  
+Recall (weighted): 0.5782  
 
 Confusion Matrix:
 
@@ -58,23 +49,21 @@ Confusion Matrix:
 
 **Random Forest**
 
-Acurácia: 0.6633
-
-Recall (weighted): 0.6633
+Accuracy: 0.6633  
+Recall (weighted): 0.6633  
 
 Confusion Matrix:
 
 ![rf_confusion_matrix.png](https://github.com/user-attachments/assets/8af353ee-7511-468d-9985-22d9db837673)
 
-### Training Models with reduced labels
+### Training Models with Reduced Labels
 
-We reduce the labels to four because on data analyses 88% of our dataset original was on three classes and we create another class named "Outros". The results:
+After analyzing the data distribution, we noticed that 88% of the tickets belonged to three classes. We reduced the labels to four by consolidating less frequent classes into a new category labeled "Outros." The models were retrained using this reduced label set, resulting in the following performance:
 
 **K-Nearest Neighbors (KNN)**
 
-Acurácia: 0.5979
-
-Recall (weighted): 0.5979
+Accuracy: 0.5979  
+Recall (weighted): 0.5979  
 
 Confusion Matrix:
 
@@ -82,9 +71,8 @@ Confusion Matrix:
 
 **Random Forest**
 
-Acurácia: 0.6837
-
-Recall (weighted): 0.6837
+Accuracy: 0.6837  
+Recall (weighted): 0.6837  
 
 Confusion Matrix:
 
@@ -92,13 +80,12 @@ Confusion Matrix:
 
 ### Training Models with Oversampling
 
-We use `SMOTE` method to Ovesampling the dataset to all classes have the same number of samples that the biggest class. Let's see the results:
+We use the `SMOTE` method to oversample the dataset so that all classes have the same number of samples as the largest class. The results are as follows:
 
 **K-Nearest Neighbors (KNN)**
 
-Acurácia: 0.5339
-
-Recall (weighted): 0.5339
+Accuracy: 0.5339  
+Recall (weighted): 0.5339  
 
 Confusion Matrix:
 
@@ -106,9 +93,8 @@ Confusion Matrix:
 
 **Random Forest**
 
-Acurácia: 0.6845
-
-Recall (weighted): 0.6845
+Accuracy: 0.6845  
+Recall (weighted): 0.6845  
 
 Confusion Matrix:
 
@@ -116,64 +102,61 @@ Confusion Matrix:
 
 ### Training Models with Downsampling
 
-We use `RandomUnderSampler` method to Downsampling the dataset to all classes have the same number of samples that the lowest class. Let's see the results:
+We use the `RandomUnderSampler` method to downsample the dataset so that all classes have the same number of samples as the smallest class. The results are as follows:
 
 **K-Nearest Neighbors (KNN)**
 
-Acurácia: 0.5791
-
-Recall (weighted): 0.5791
+Accuracy: 0.5791  
+Recall (weighted): 0.5791  
 
 Confusion Matrix:
 
 ![image](https://github.com/user-attachments/assets/a8be76f4-62c0-446d-bd0a-daaf8a10d767)
 
-
 **Random Forest**
 
-Acurácia: 0.6711
-
-Recall (weighted): 0.6711
+Accuracy: 0.6711  
+Recall (weighted): 0.6711  
 
 Confusion Matrix:
 
 ![image](https://github.com/user-attachments/assets/678f12be-2bc0-4674-be88-be1df0755580)
 
-### Hyperparameters tuning with GridSearchCV
+### Hyperparameters Tuning with GridSearchCV
 
-We use `GridSearchCV` to tune the models hyperparameters. There some suggestion that we pass to ``GridSearch`:
+We use `GridSearchCV` to tune the models' hyperparameters. The following parameter grids were used for tuning:
 
 ```
 knn_param_grid = {
-    'n_neighbors': list(range(2, 21)),  # Testando valores de 2 a 20 para o número de vizinhos
-    'metric': ['euclidean', 'manhattan', 'cosine'],  # Diferentes métricas de distância
-    'weights': ['uniform', 'distance']  # Pesos uniformes ou baseados na distância
+    'n_neighbors': list(range(2, 21)),
+    'metric': ['euclidean', 'manhattan', 'cosine'],
+    'weights': ['uniform', 'distance']
 }
 rf_param_grid = {
-    'n_estimators': [50, 100, 200],  # Número de árvores na floresta
-    'max_depth': [None, 10, 20, 30],  # Profundidade máxima da árvore
-    'min_samples_split': [2, 5, 10],  # Número mínimo de amostras para dividir um nó
-    'min_samples_leaf': [1, 2, 4],  # Número mínimo de amostras em um nó folha
-    'max_features': ['sqrt', 'log2', None],  # Número de recursos considerados para melhor divisão
-    'bootstrap': [True, False]  # Usar ou não bootstrap
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+    'max_features': ['sqrt', 'log2', None],
+    'bootstrap': [True, False]
 }
 ```
-After 5 hours the "Search" returns:
+
+After 5 hours, the GridSearch returned:
 
 ```
-Melhores parâmetros para o KNN: {'metric': 'cosine', 'n_neighbors': 16, 'weights': 'distance'}
-Acurácia média do KNN com os melhores parâmetros: 0.761531074289695
-Melhores parâmetros para o Random Forest: {'bootstrap': False, 'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 200}
-Acurácia média do Random Forest com os melhores parâmetros: 0.7786772810406115 
+Best parameters for KNN: {'metric': 'cosine', 'n_neighbors': 16, 'weights': 'distance'}
+Average accuracy of KNN with the best parameters: 0.761531074289695
+Best parameters for Random Forest: {'bootstrap': False, 'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 200}
+Average accuracy of Random Forest with the best parameters: 0.7786772810406115
 ```
 
-Applying that hyperparameters to the models the results:
+Applying these hyperparameters to the models, the results were:
 
 **K-Nearest Neighbors (KNN)**
 
-Acurácia: 0.6187
-
-Recall (weighted): 0.6187
+Accuracy: 0.6187  
+Recall (weighted): 0.6187  
 
 Confusion Matrix:
 
@@ -181,8 +164,8 @@ Confusion Matrix:
 
 **Random Forest**
 
-Acurácia: 0.6911
-Recall (weighted): 0.6911
+Accuracy: 0.6911  
+Recall (weighted): 0.6911  
 
 Confusion Matrix:
 
@@ -190,6 +173,4 @@ Confusion Matrix:
 
 ## Results
 
-Reducing the labels, oversampling and tuning the hyperparameters of the models we recommend using the **Random Forest** model. We almost got an accuracy of 70% and the same to Recall.
-Our guess are that our vectorization was poorly managed and our improvement to this project is to revisit the ``Preprocessing` step and refactor the script.
-
+After evaluating various configurations, including reduced labels, oversampling, and hyperparameter tuning, we recommend the **Random Forest** model due to its superior performance, achieving nearly 70% accuracy and weighted recall. However, we identified potential shortcomings in the vectorization process, suggesting that revisiting and refining the preprocessing step could further improve model performance. Future work will focus on optimizing text vectorization techniques to enhance classification accuracy.
