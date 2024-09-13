@@ -66,3 +66,51 @@ Confusion Matrix:
 
 ![rf_confusion_matrix.png](https://github.com/user-attachments/assets/8af353ee-7511-468d-9985-22d9db837673)
 
+### Training Models with reduced labels
+
+We reduce the labels to four because on data analyses 88% of our dataset original was on three classes and we create another class named "Outros". The results:
+
+**K-Nearest Neighbors (KNN)**
+
+Acurácia: 0.5979
+
+Recall (weighted): 0.5979
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/fc7e0e63-9ef2-430e-bc54-91bc88541a26)
+
+**Random Forest**
+
+Acurácia: 0.6837
+
+Recall (weighted): 0.6837
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/0f67d194-521d-4220-affd-6665313d8c58)
+
+### Training Models with Oversampling
+
+We use SMOTE method to Ovesampling the dataset to all classes have the same number of samples that the biggest class. Let's see the results:
+
+**K-Nearest Neighbors (KNN)**
+
+Acurácia: 0.5339
+
+Recall (weighted): 0.5339
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/2ab79765-b972-40b4-9ce4-91e295aac069)
+
+**Random Forest**
+
+Acurácia: 0.6845
+
+Recall (weighted): 0.6845
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/33de3092-7af1-4204-8791-5206c62ba828)
+
