@@ -28,4 +28,41 @@ The first step involves acquiring data from the source. In this case, we use a d
 
 ## Preprocessing
 
-This step takes the CSV file as input and cleans the data. The description and title columns are concatenated,punctuation and stopwords are removed, and word tokenization is performed.
+This step takes the CSV file as input and cleans the data. The description and title columns are concatenated,punctuation and stopwords are removed, and word tokenization is performed. To conclude we use TF-IDV method to vectorize our tokens and create five versions of dataframes change the min_df parameter that been 0.025, 0.05, 0.01, 0.1, 0.075.
+
+## Data Segregation
+
+This step occurs at the end of `preprocessing.ipynb`. We split the datasets created at the step above about 50% to train the model and 50% to validate the model. After that we save all datasets in CSV files named of each parameter.
+
+## Train
+
+This step receives the datasets divided in the previous step and carries out the training of k-NN and Random Forest model. There is the steps that we follow:
+
+### Evaluate accuracy with k-NN
+
+We use k-NN model to get the dataset with the best accuracy. After that, with the five train datasets that we have, the best result is the 0.01 dataset.
+
+### Training Models with the best dataset
+
+We use the best dataset without changes and get the following results:
+
+**K-Nearest Neighbors (KNN)**
+
+Acurácia: 0.5782
+
+Recall (weighted): 0.5782
+
+Confusion Matrix:
+
+![knn_confusion_matrix.png](https://github.com/user-attachments/assets/eee14989-a6cf-4898-b957-b180431f4d9c)
+
+**Random Forest**
+
+Acurácia: 0.6633
+
+Recall (weighted): 0.6633
+
+Confusion Matrix:
+
+![rf_confusion_matrix.png](https://github.com/user-attachments/assets/8af353ee-7511-468d-9985-22d9db837673)
+
