@@ -92,7 +92,7 @@ Confusion Matrix:
 
 ### Training Models with Oversampling
 
-We use SMOTE method to Ovesampling the dataset to all classes have the same number of samples that the biggest class. Let's see the results:
+We use `SMOTE` method to Ovesampling the dataset to all classes have the same number of samples that the biggest class. Let's see the results:
 
 **K-Nearest Neighbors (KNN)**
 
@@ -113,4 +113,83 @@ Recall (weighted): 0.6845
 Confusion Matrix:
 
 ![image](https://github.com/user-attachments/assets/33de3092-7af1-4204-8791-5206c62ba828)
+
+### Training Models with Downsampling
+
+We use `RandomUnderSampler` method to Downsampling the dataset to all classes have the same number of samples that the lowest class. Let's see the results:
+
+**K-Nearest Neighbors (KNN)**
+
+Acurácia: 0.5791
+
+Recall (weighted): 0.5791
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/a8be76f4-62c0-446d-bd0a-daaf8a10d767)
+
+
+**Random Forest**
+
+Acurácia: 0.6711
+
+Recall (weighted): 0.6711
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/678f12be-2bc0-4674-be88-be1df0755580)
+
+### Hyperparameters tuning with GridSearchCV
+
+We use `GridSearchCV` to tune the models hyperparameters. There some suggestion that we pass to ``GridSearch`:
+
+```
+knn_param_grid = {
+    'n_neighbors': list(range(2, 21)),  # Testando valores de 2 a 20 para o número de vizinhos
+    'metric': ['euclidean', 'manhattan', 'cosine'],  # Diferentes métricas de distância
+    'weights': ['uniform', 'distance']  # Pesos uniformes ou baseados na distância
+}
+rf_param_grid = {
+    'n_estimators': [50, 100, 200],  # Número de árvores na floresta
+    'max_depth': [None, 10, 20, 30],  # Profundidade máxima da árvore
+    'min_samples_split': [2, 5, 10],  # Número mínimo de amostras para dividir um nó
+    'min_samples_leaf': [1, 2, 4],  # Número mínimo de amostras em um nó folha
+    'max_features': ['sqrt', 'log2', None],  # Número de recursos considerados para melhor divisão
+    'bootstrap': [True, False]  # Usar ou não bootstrap
+}
+```
+After 5 hours the "Search" returns:
+
+```
+Melhores parâmetros para o KNN: {'metric': 'cosine', 'n_neighbors': 16, 'weights': 'distance'}
+Acurácia média do KNN com os melhores parâmetros: 0.761531074289695
+Melhores parâmetros para o Random Forest: {'bootstrap': False, 'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 200}
+Acurácia média do Random Forest com os melhores parâmetros: 0.7786772810406115 
+```
+
+Applying that hyperparameters to the models the results:
+
+**K-Nearest Neighbors (KNN)**
+
+Acurácia: 0.6187
+
+Recall (weighted): 0.6187
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/c9929ebc-ce90-414f-a18b-77791951eb09)
+
+**Random Forest**
+
+Acurácia: 0.6911
+Recall (weighted): 0.6911
+
+Confusion Matrix:
+
+![image](https://github.com/user-attachments/assets/e8b4b2e3-fbcd-4c44-bf7d-0e01b8b08109)
+
+## Results
+
+Reducing the labels, oversampling and tuning the hyperparameters of the models we recommend using the **Random Forest** model. We almost got an accuracy of 70% and the same to Recall.
+Our guess are that our vectorization was poorly managed and our improvement to this project is to revisit the ``Preprocessing` step and refactor the script.
 
