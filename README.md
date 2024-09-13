@@ -12,20 +12,20 @@ Introduction to Machine Learning. Data Classification: classification problems; 
 
 ## Introduction
 
-The Regional Electoral Court of Rio Grande do Norte (TRE-RN) uses the GLPI ("Gestionnaire Libre de Parc Informatique") system to manage its IT assets, problem tracking and service center. Currently, there is a department that analyzes all support tickets and classifies them, if this has not been done by the user, so that they can reach the responsible location. Failure to classify them leads to a longer wait time, resulting in a customer who is unable to actively perform their activity.
+The Regional Electoral Court of Rio Grande do Norte (TRE-RN) uses the GLPI ("Gestionnaire Libre de Parc Informatique") system to manage its IT assets, problem tracking and service center. Currently, there is a department that analyzes all support tickets and classifies them, if this has not been done by the user, so that they can reach the responsible location. Failure to classify the tickets properly leads to longer wait times, resulting in a customer who is unable to actively perform their activity.
 
 This project consists of using classification models to optimize the efficiency of the triage sector and ensure faster service to the end customer. A pipeline was developed to classify the tickets descriptions by the customer. The dataset consists of approximately 65 thousand tickets.
 
 ## Pipeline
 
-The developed pipeline consists of four steps in total, where a green box represents a step taken on a script, and a blue box represents the output artifact of that step.
+The pipeline used  in this project consists of four steps shown in the flowchart below. The green boxes represent a step taken and the blue boxes represent the output artifact of that step.
 
 ![pipeline.png](./pipeline.png)
 
 ## Fetch Data
 
-The first step involves acquiring data from the source. In this case, we use a database dump that contains GLPI data and recreate the database using a MariaDB Docker container. Then, we extract the relevant columns needed for labelling the tickets and its their description and save on a CSV file.
+The first step involves acquiring data from the source. In this case, we use a database dump that contains GLPI data and recreate the database using a MariaDB container. From the recreated database we extract a dataset containing the tickets titles, descriptions and categories and save it to a CSV file.
 
 ## Preprocessing
 
-This step also takes the CSV file as input and is responsible for cleaning the data. In this case, all text is converted to lowercase, punctuation and stopwords are removed, and finally, word tokenization is performed.
+This step takes the CSV file as input and cleans the data. The description and title columns are concatenated,punctuation and stopwords are removed, and word tokenization is performed.
